@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alt Text Generator</title>
+  <style>
+    body {
+      width: 400px;
+      padding: 15px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    h1 {
+      margin: 0 0 15px 0;
+      font-size: 18px;
+      color: #333;
+    }
+    
+    .status {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: none;
+    }
+    
+    .status.info {
+      background: #e3f2fd;
+      color: #1976d2;
+      border-left: 4px solid #1976d2;
+      display: block;
+    }
+    
+    .status.success {
+      background: #e8f5e9;
+      color: #388e3c;
+      border-left: 4px solid #388e3c;
+      display: block;
+    }
+    
+    .status.error {
+      background: #ffebee;
+      color: #c62828;
+      border-left: 4px solid #c62828;
+      display: block;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    
+    button {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-secondary {
+      background: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    
+    .btn-secondary:hover {
+      background: #efefef;
+    }
+    
+    .btn-copy {
+      background: #4caf50;
+      color: white;
+      margin-top: 10px;
+      width: 100%;
+    }
+    
+    .btn-copy:hover {
+      background: #45a049;
+    }
+    
+    .settings-link {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 15px;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+    
+    .settings-link a {
+      color: #667eea;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .settings-link a:hover {
+      text-decoration: underline;
+    }
+    
+    #stats {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #altTextOutput {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 12px;
+      margin-top: 10px;
+      display: none;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #altTextOutput.show {
+      display: block;
+    }
+
+    #altTextOutput p {
+      margin: 0;
+      word-wrap: break-word;
+      color: #333;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Alt Text Generator</h1>
+    
+    <div id="status" class="status"></div>
+    <div id="stats"></div>
+    
+    <div class="button-group">
+      <button id="generateBtn" class="btn-primary">Capture Screen</button>
+      <button id="selectRegionBtn" class="btn-primary" style="background: #ff9800;">Select Region</button>
+    </div>
+    
+    <div class="button-group">
+      <button id="settingsBtn" class="btn-secondary">Settings</button>
+    </div>
+    
+    <div id="altTextOutput"></div>
+    
+    <div id="regionSelector" style="display: none; margin-top: 15px;">
+      <p style="margin: 0 0 10px 0; font-size: 12px; color: #666;">
+        Click and drag to select a region:
+      </p>
+      <canvas id="selectionCanvas" style="width: 100%; border: 1px solid #ddd; border-radius: 4px; cursor: crosshair;"></canvas>
+    </div>
+    
+    <button id="copyBtn" class="btn-copy" style="display: none;">Copy Alt Text</button>
+    
+    <div class="settings-link">
+      <a id="openSettings">API Key Setup</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
